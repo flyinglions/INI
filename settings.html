@@ -11,52 +11,52 @@
         <script src="./theme/Wikus/jquery.mobile-1.1.0.min.js"></script>
 	
 	<script type="text/javascript" charset="utf-8" src="cordova-1.9.0.js"></script>
-	<script type="text/javascript" charset="utf-8" src="INIlib.js"></script>
+	<script type="text/javascript" charset="utf-8" src="filehandle.js"></script>
+	<script type="text/javascript" charset="utf-8" src="newINI.js"></script>
 	
 	<script type="text/javascript">
+            
+  /*Settings javascript code: to test INI manipulation
+   *
+   */
+  //create an INI object
+  //manipulate the INI object
+  //destroy the INI object by saving its' contents to a file
+  
+  //the following code is just an example of what can be accomplished by using the INI.js library
+  //startINI() is a function that reads from the settings file and creates an INI object by parsing the text from the file.
+  //stopINI() writes the back to INI object to the file
+  
+  //INIset(section,subsection,somevalue) sets or creates this section with the corresponding subsection to somevalue
+  //INIget(section,subsection) return the value or null
+  
+ /*Code following*/
+ 
+  // Wait for Cordova to load
+document.addEventListener("deviceready", startINI(), false);
+  
 
-// Wait for Cordova to load
-/*document.addEventListener("deviceready", onDeviceReady, false);
+  function setUserAge() {
+      //var age = get('user','age');
+      //if (age==null)
+      
+                var newage = document.getElementById("input").value+"";
+                alert("trying to set"+newage);
+      if (INIset("user","age",newage))
+          alert("age is set successfully");
+      else
+          alert("could not set age");
+             
+  }
+function getUserAge() {
+    //createsect();
+    alert("getting age");
+    var age = INIget("user","age");
+    alert("getting age"+age);
+    document.getElementById("age").innerHTML = "Age: "+age;
+}
 
-// Cordova is ready
-    //
-    function onDeviceReady() {
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
-    }
-
-    function gotFS(fileSystem) {
-        fileSystem.root.getFile("settings.ini", null, gotFileEntry, fail);
-    }
-
-    function gotFileEntry(fileEntry) {
-        fileEntry.file(gotFile, fail);
-    }
-
-    function gotFile(file){        
-        readAsText(file);
-    }
-
-
-    function readAsText(file) {
-        var reader = new FileReader();
-        reader.onloadend = function(evt) {
-            console.log("Read as text");
-            console.log(evt.target.result);
-        };
-        reader.readAsText(file);
-    }
-
-    function fail(evt) {
-        console.log(evt.target.error.code);
-    }
-*/
-
-function wini() {
-
-
-
-var ini = new Ini();
-
+/*var ini = new Ini();
 ini.parse([
     'prop = value',
     '[sect]',
@@ -76,7 +76,7 @@ alert(ini.toString());        // Generates back the ini file
 //writeToIni('user','customvar');
 }
 
-//function readValue(file_text,section,
+//function readValue(file_text,section,*/
 
 </script>
   </head>
@@ -84,17 +84,23 @@ alert(ini.toString());        // Generates back the ini file
   <div id="loader" data-role="page" data-theme="a">
  <div data-role="header" data-position="inline">
                 <h1>User Settings</h1>
+                <h2>Remember the INIstart is called when this page is opened</h2>
             </div>
   
     <div data-role="content">
-      <p>Test enter something, close and open again</p>
-      <p id="out">ggo</p>
-      <input name="customvar" type="text" value="jj" />
-      <input class="button" type="button" value="Save" onclick="wini() ;"/><br />
+        <p id="age">User age displayed here</p>
       
+      <input id="input" name="customvar" type="text" value="88" />
+      <input class="button" type="button" value="change age in the internal INI object" onclick="setUserAge() ;"/><br />
       
+      <input class="button" type="button" value="get user age and display it" onclick="getUserAge() ;"/><br />
+      
+      <!--<input class="button" type="button" value="Open File(settings.ini)" onclick="startINI() ;"/><br />-->
+      <input class="button" type="button" value="Close File(settings.ini)" onclick="stopINI() ;"/><br />
+      <input class="button" type="button" value="Show contents" onclick="showContents() ;"/><br />
       
     </div>
+  </div>
     
     
   </body>
