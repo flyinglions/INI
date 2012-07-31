@@ -147,11 +147,14 @@ function Ini(contents){
     
     
 function startINI() {
+  //fileSystemInit();
+  //filename = "settings.ini";
+  //readFromFile();
   
     //get text from phonegap-api
-    ini = new Ini([    
+   ini = new Ini([    
     '[user]',
-    'foo = "bar"',
+    'foo = ho iszit',
     'baz = "tttt"',
     '[other]',
     'foo = "2bar"',
@@ -159,6 +162,7 @@ function startINI() {
     '[fff]',
     'hello = "how are you"',
 ].join('\n'));
+    //ini = new Ini(file_text);
 
 
     
@@ -168,6 +172,8 @@ function startINI() {
 
 function stopINI() {
     //write to file
+    //file_text = toStr();
+    //writeToFile();
     delete ini;
 }
 
@@ -180,6 +186,7 @@ function INIset(isection,ikey,ivalue) {
                 if (ini.sections[k].items[p].name==ikey) {
                     ini.sections[k].items[p].val = ivalue;
                     keyset=true;
+                    return true;
                 }
                 
             }
@@ -188,7 +195,7 @@ function INIset(isection,ikey,ivalue) {
             }
             
             sectionset = true;
-            break;
+            return true;
         }
             
         
@@ -197,6 +204,7 @@ function INIset(isection,ikey,ivalue) {
     if (!sectionset) {
             ini.sections.push(new Section(isection));
             ini.sections[ini.sections.length-1].items.push(new Property(ikey,ivalue));
+            return true;
     }
     
 }
