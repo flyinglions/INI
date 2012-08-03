@@ -1,12 +1,27 @@
+/* 
+ * File handling done here:
+ * 
+ */
+
+var theini;
+var FS;
+var filename="settings.ini";
+var file_entry ;
+var file_text="empty";
+
+
+
 function Ini(contents){
-	
+	//alert('ini created');
         this.sections = new Array();
         
-        
-        parse = function(content,inis) {
+        this.prse = function (content,inis) {
+		parse(content,inis);
+	}
+        parse = function (content,inis) {
             var i, ln, m, key, val,  prop = '',
             lines = contents.split(/\r\n|\r|\n/);
-
+//alert("parsing");
         
 	var index =-1;
 	    
@@ -45,12 +60,7 @@ function Ini(contents){
                 continue;
             }
 
-            // Check if this line is continued on the next
-            /*if (ln.charAt(ln.length-1) === '\\') {
-                prop += ln.substr(0, ln.length-1);
-                continue;
-            }*/
-
+        
             // Property
             prop = prop.length > 0 ? prop + ' ' + ln : ln;
 
@@ -122,21 +132,16 @@ function Ini(contents){
     }
     
   
-    
-    
-    
-    
-    var ini;
-    
+ 
       function toStr() {
           var s="";
          
-        for (var k =0; k<ini.sections.length; k++ ) {
+        for (var k =0; k<theini.sections.length; k++ ) {
  
-            s+="["+ini.sections[k].name+"]\n";
+            s+="["+theini.sections[k].name+"]\n";
  
-            for (var p =0; p<ini.sections[k].items.length; p++ ) {
-                s+=ini.sections[k].items[p].name+"="+ini.sections[k].items[p].val+"\n";
+            for (var p =0; p<theini.sections[k].items.length; p++ ) {
+                s+=theini.sections[k].items[p].name+"="+theini.sections[k].items[p].val+"\n";
             }
         }
         
@@ -146,13 +151,151 @@ function Ini(contents){
     }
     
     
+
+
+
+
+
+
+
+function setFileName(fname) {
+    filename = fname;
+}
+
+function fileSystemInit() {
+// alert("File system init");
+//i made the filesize 100kb....?
+//window.requestFileSystem(fileSystemType, 1024 * 1024, onGetFileSystemSuccess, onFileError);
+  window.requestFileSystem(1, 1024 * 100, gotFSSuccess, failed);
+}
+
+
+function gotFSSuccess(filesystem) {
+    
+    FS = filesystem;
+   // alert("Got the filesystem");
+    FS.root.getFile(filename,{create : true},gotFileEntry,failed);
+}
+
+function gotFileEntry(theFile) {
+//	alert("onGetFileSuccess: " + theFile.name);
+
+    file_entry = theFile;
+readFromFile();
+    //thefileentry.file(gotFile,failed);
+}
+
+/*Reading the file here*/
+
+function readFromFile() {
+    file_entry.file(fileReaderSuccess,failed);
+}
+
+function fileReaderSuccess(file) {
+	//alert("get reading file");
+    var reader = new FileReader();
+    reader.onloadend = function(e) {
+    
+     file_text = e.target.result;
+     alert("read:"+file_text);
+	    
+	     if (file_text.length==0) {
+	  
+	  file_text="[author]\nname=Pieter\n[user]";
+  }
+ // alert("file_text: "+file_text);
+  theini = new Ini(file_text);
+	    
+    };
+    reader.onloaderror = function(e) {
+    failed;
+  };
+  
+  reader.readAsText(file);
+  
+  /*if (file_text.length===0)
+    ini = new Ini('[user]');
+  else 
+  ini = new Ini(file_text);*/
+ 
+}
+
+/*Writing the file here*/
+
+
+function writeToFile() {
+	FS.root.getFile(filename,{create : true},gotFileEntryforWriter,failed);
+    
+}
+
+function gotFileEntryforWriter(theFile) {
+	theFile.createWriter(fileWriterSuccess, failed);
+}
+
+function fileWriterSuccess(writer) {
+    writer.onwrite = function(e) {
+//alert("Write Completed");
+  };
+    writer.write(toStr());//'[author]\nname=Pieter\n[user]');
+    
+}
+
+
+
+function gotFile(thefile) {
+    /*var reader = new FileReader();
+    reader.readAsText(file);*/
+    file = thefile;
+}
+
+
+function failed() {
+    console.log(error.code);
+    alert("failed..");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    
+    
+    //var ini;
+    
+    
+    
+   
+    
+    
 function startINI() {
-  //fileSystemInit();
+  fileSystemInit();
+	alert("init success");
   //filename = "settings.ini";
-  //readFromFile();
+   
   
     //get text from phonegap-api
-   ini = new Ini([    
+  /* ini = new Ini([    
     '[user]',
     'foo = ho iszit',
     'baz = "tttt"',
@@ -161,8 +304,8 @@ function startINI() {
     'baz = "ddd"',
     '[fff]',
     'hello = "how are you"',
-].join('\n'));
-    //ini = new Ini(file_text);
+].join('\n'));*/
+  
 
 
     
@@ -172,26 +315,28 @@ function startINI() {
 
 function stopINI() {
     //write to file
-    //file_text = toStr();
-    //writeToFile();
-    delete ini;
+    //file_text = 
+    writeToFile();
+    //delete ini;
 }
 
 function INIset(isection,ikey,ivalue) {
+	/*if (ini==null) 
+	ini = new INI('[user]');*/
     var sectionset=false;
     var keyset=false;
-    for (var k =0; k<ini.sections.length; k++ ) {
-        if (ini.sections[k].name==isection) {
-            for (var p =0; p<ini.sections[k].items.length; p++ ) {
-                if (ini.sections[k].items[p].name==ikey) {
-                    ini.sections[k].items[p].val = ivalue;
+    for (var k =0; k<theini.sections.length; k++ ) {
+        if (theini.sections[k].name==isection) {
+            for (var p =0; p<theini.sections[k].items.length; p++ ) {
+                if (theini.sections[k].items[p].name==ikey) {
+                    theini.sections[k].items[p].val = ivalue;
                     keyset=true;
                     return true;
                 }
                 
             }
             if (!keyset) {
-                    ini.sections[k].items.push(new Property(ikey,ivalue));
+                    theini.sections[k].items.push(new Property(ikey,ivalue));
             }
             
             sectionset = true;
@@ -202,19 +347,19 @@ function INIset(isection,ikey,ivalue) {
             
     }
     if (!sectionset) {
-            ini.sections.push(new Section(isection));
-            ini.sections[ini.sections.length-1].items.push(new Property(ikey,ivalue));
+            theini.sections.push(new Section(isection));
+            theini.sections[ini.sections.length-1].items.push(new Property(ikey,ivalue));
             return true;
     }
     
 }
 function INIget(section,key) {
-    for (var k =0; k<ini.sections.length; k++ ) {
-        if (ini.sections[k].name == section)
-        for (var p =0; p<ini.sections[k].items.length; p++ ) {
-            if (ini.sections[k].items[p].name==key) {
+    for (var k =0; k<theini.sections.length; k++ ) {
+        if (theini.sections[k].name == section)
+        for (var p =0; p<theini.sections[k].items.length; p++ ) {
+            if (theini.sections[k].items[p].name==key) {
                 
-                return ini.sections[k].items[p].val;
+                return theini.sections[k].items[p].val;
             }
         }
         
@@ -228,3 +373,4 @@ function INIget(section,key) {
 function showContents() {
     alert(toStr());
 }
+
