@@ -11,7 +11,7 @@
         <script src="./theme/Wikus/jquery.mobile-1.1.0.min.js"></script>
 	
 	<script type="text/javascript" charset="utf-8" src="cordova-1.9.0.js"></script>
-	<script type="text/javascript" charset="utf-8" src="filehandle.js"></script>
+	<script type="text/javascript" charset="utf-8" src="inisystem.js"></script>
 <!--	<script type="text/javascript" charset="utf-8" src="newINI.js"></script>-->
 	
 	<script type="text/javascript">
@@ -33,16 +33,15 @@
  /*Code following*/
 
  function onBodyLoad() {
-        //During testing, Let me know we got this far
-       // alert("onBodyLoad");
+       
         //Add the PhoneGap deviceready event listener
         document.addEventListener("deviceready", onDeviceReady, false);
       }
 
       function onDeviceReady() {
-        //During testing, Let me know PhoneGap actually
-        // initialized
-       // alert("onDeviceReady");
+        //PhoneGap initialized
+        
+       
 	startINI();
       }
 
