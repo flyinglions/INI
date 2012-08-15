@@ -13,7 +13,8 @@ public class UserSettingsActivity extends DroidGap {
         super.onCreate(savedInstanceState);
        // setContentView(R.layout.main);
 	//super.loadUrl("file:///android_asset/www/get_sms_id.html");
-	super.loadUrl("file:///android_asset/www/write_decoded_data_to_file.html");
+	//super.loadUrl("file:///android_asset/www/write_decoded_data_to_file.html");
+        super.loadUrl("file:///android_asset/www/index.html");
 	
     }
 }

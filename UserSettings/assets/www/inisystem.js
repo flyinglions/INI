@@ -371,7 +371,7 @@ function showContents() {
 var file_content;
 var general_filename = "tmp.txt";
 var regular_FS;
-var regular_file_entry;
+//var regular_file_entry;
 
 function regular_fileSystemInit() {
 	window.requestFileSystem(1,0, regular_gotFSSuccess, failed);
@@ -379,26 +379,31 @@ function regular_fileSystemInit() {
 }
 function regular_gotFSSuccess(filesystem) {
    // Got the filesystem 
+	console.log("got filesystem");
     regular_FS = filesystem;   
-    regular_FS.root.getFile(general_filename,{create : true},regular_gotFileEntry,failed);
+  
 }
-function regular_gotFileEntry(theFile) {
-	regular_file_entry = theFile;
-	
-}
+
+
 
 /*=============================*/
 /*READING FROM THE FILE THAT IS LOADED*/
 /*=============================*/
 
+function failed_read(error) { console.log("reading error: "+error); }
 
 //function to initialize the reading of a file specified by the {regular_file_entry}
-function regular_readFromFile() {
-    regular_file_entry.file(r_fileReaderSuccess,failed);
+function regular_readFromFile(fname) {
+	regular_FS.root.getFile(fname,{create : false},read_gotFileEntry,failed_read);  
+    
+}
+
+function read_gotFileEntry(theFile) {	//regular_file_entry = theFile;	
+	theFile.file(read_fileReaderSuccess,failed_read);
 }
 
 //got file - now load the content:
-function r_fileReaderSuccess(file) {
+function read_fileReaderSuccess(file) {
 	var reader = new FileReader();
 	reader.onloadend = function(e) {    
 		file_content = e.target.result;
@@ -416,21 +421,22 @@ function r_fileReaderSuccess(file) {
 }
 
 /*===========================*/
-/*WRITING TO THE FILE THAT IS LOADED*/ /*Using FS (for now)
+/*WRITING TO THE FILE THAT IS LOADED*/ /*Using regular_FS (for now)
 /*===========================*/
 
-function regular_writeToFile() {
-regular_FS.root.getFile(general_filename,{create : true},r_gotFileEntryforWriter,failed);
-    
+function write_failed(error) { console.log("writing error: " + error); }
+
+function regular_writeToFile(fname) {
+	regular_FS.root.getFile(fname,{create : true},write_gotFileEntry,write_failed);    
 }
 
-function r_gotFileEntryforWriter(theFile) {
-theFile.createWriter(r_fileWriterSuccess, failed);
+function write_gotFileEntry(theFile) {
+theFile.createWriter(write_fileWriterSuccess, write_failed);
 }
 
-function r_fileWriterSuccess(writer) {
+function write_fileWriterSuccess(writer) {
 	writer.onwrite = function(e) {
-		console.log("Writing done!");
+		console.log("Writing done!"+file_content);
 	};	
 	writer.write(file_content);
 }
@@ -438,16 +444,15 @@ function r_fileWriterSuccess(writer) {
 /* DELETING OF FILE */
 /*=========================*/
 
-function fail_delete(error) { console.log("file could not be deleted"); }
-function success(entry) { console.log("file deleted successfully"); }
+function fail_delete(error) { console.log("file could not be deleted: "+error); }
+function success_delete(entry) { console.log("file deleted successfully"); }
 
 function performdeletion(fname) {
-	regular_FS.root.getFile(fname,{create : false},entryfordelete,failed);    
+	regular_FS.root.getFile(fname,{create : false},entryfordelete,fail_delete);    
 }
 
-function entryfordelete(theFile) {
-	theFile.remove(success,fail_delete);
-}
+//removing the file
+function entryfordelete(theFile) {	theFile.remove(success_delete,fail_delete); }
 
 /*=========================================================*/
 /* READ DIRECTORY AND SAVE CONTENT TO {dir_entries}*/
@@ -457,8 +462,7 @@ function getDirectoryEntries() {
   window.requestFileSystem(1, 0, onGetFileSystemSuccess, file_error);
 }
 
-function onGetFileSystemSuccess(fs) {
-  
+function onGetFileSystemSuccess(fs) {  
   //theFileSystem = fs;
   var dr = fs.root.createReader();
   // Get a list of all the entries in the directory
@@ -472,16 +476,16 @@ function onDirReaderSuccess(dirEntries) {
   
   var num_file_entries = 0;
   var i,  len;
-  len = theEntries.length;
+  len = dirEntries.length;
   if(len > 0) {
     
     for( i = 0; i < len; i++) {
-      if(theEntries[i].isDirectory == true) {
-	      console.log("dir: "+theEntries[i].name);
+      if(dirEntries[i].isDirectory == true) {
+	      console.log("dir: "+dirEntries[i].name);
         
       } else {
-	      console.log("file: "+theEntries[i].name);
-        dir_entries_arr[num_file_entries] = theEntries[i].name;
+	      console.log("file: "+dirEntries[i].name);
+        dir_entries_arr[num_file_entries] = dirEntries[i].name;
 	      num_file_entries =num_file_entries+1;
       }
     }
@@ -498,18 +502,18 @@ function onDirReaderSuccess(dirEntries) {
 /*TOP LEVEL READ / WRITE FUNTIONS */
 /*=========================*/
 
-function initFileSystem(fname) {
-	general_filename = fname;
+function initFileSystem() {	
+	console.log("initing the filesystem..");
 	regular_fileSystemInit();
 }
 
 //function to read a file and store the contents in the file_text variable
-function readFile() {
-	regular_readFromFile();    
+function readFile(fname) {
+	regular_readFromFile(fname);    
 }
 
-function writeFile() {
-	regular_writeToFile();
+function writeFile(fname) {
+	regular_writeToFile(fname);
 }
 
 function deleteFile(fname) {
