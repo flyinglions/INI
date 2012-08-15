@@ -43,6 +43,8 @@
         
        
 	startINI();
+	initFileSystem();
+	file_content = "dummy text here .....";
       }
 
   function setUserAge() {
@@ -122,13 +124,18 @@ alert(ini.toString());        // Generates back the ini file
       <input class="button" type="button" value="Close File(settings.ini)" onclick="stopINI() ;"/><br />
       <input class="button" type="button" value="Show contents" onclick="showContents() ;"/><br />
       
-      <input class="button" type="button" value="Delete Settings.ini" onclick="deleteFile('settings.ini') ;"/><br />
-      <input class="button" type="button" value="dir entries - see console" onclick="getDirectoryEntries();"/><br />
+      
       
       <br />
       <input id="keyinput" name="key" type="text"  />
       <input id="valinput" name="val" type="text"  />
       <input class="button" type="button" value="Insert or update" onclick="insert() ;"/><br />
+      
+      <br />
+      <input class="button" type="button" value="write to file" onclick="writeFile('new.txt') ;"/><br />
+      <input class="button" type="button" value="read from file - new.txt" onclick="readFile('new.txt') ;"/><br />
+      <input class="button" type="button" value="Delete new.txt" onclick="deleteFile('new.txt') ;"/><br />
+      <input class="button" type="button" value="dir entries - see console" onclick="getDirectoryEntries();"/><br />
       
       
     </div>
