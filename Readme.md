@@ -33,18 +33,17 @@
 ### (4) when done, call the stopINI() function to write the INI object back to the settings.ini file
 	
 ##General File Handling:
-	/*General file handling*/
-	/*To delete a file */
+	/*General file handling*/	
+	
+#####To read/write/delete a file:
+#####Call this first:
+	
+	initFileSystem();
+	
+#####then
+	readFile("thefilenamehere");
+	writeFile("thefilenamehere");
 	deleteFile("thefilenamehere");
-	
-	/*To read/write a file:*/
-	/*Call this first:*/
-	
-	initFileSystem("filenamehere");
-	
-	/*then*/
-	readFile();
-	writeFile();
 	
 ###NB
 
