@@ -45,11 +45,15 @@
 	writeFile("thefilenamehere");
 	deleteFile("thefilenamehere");
 	
+	
 ###NB
 
 ####The contents of a file is read to and written from a variable name {file_content}
 ####So just write to and read from that variable to access the contents after calling either readFile or writeFile
 	
+###To get the directory entries:
+	getDirectoryEntries();
+####All the entries that are files will then be stored in an array called {dir_entries_arr} - just access it from there (easy javascript array handling)
 	
 	
 
