@@ -81,6 +81,11 @@ function getUserAge() {
     document.getElementById("age").innerHTML = "Age: "+age;
 }
 
+function changeFileContent() {
+file_content = document.getElementById("input").value;
+
+}
+
 /*var ini = new Ini();
 ini.parse([
     'prop = value',
@@ -101,7 +106,13 @@ alert(ini.toString());        // Generates back the ini file
 //writeToIni('user','customvar');
 }
 
+
+
 //function readValue(file_text,section,*/
+
+function gotText(text) {
+alert(text);
+}
 
 </script>
   </head>
@@ -116,6 +127,7 @@ alert(ini.toString());        // Generates back the ini file
         <p id="age">User age displayed here</p>
       
       <input id="input" name="customvar" type="text" value="88" />
+      <input class="button" type="button" value="save to file_content" onclick="changeFileContent();"/><br />
       <input class="button" type="button" value="change age in the internal INI object" onclick="setUserAge() ;"/><br />
       
       <input class="button" type="button" value="get user age and display it" onclick="getUserAge() ;"/><br />
@@ -133,7 +145,8 @@ alert(ini.toString());        // Generates back the ini file
       
       <br />
       <input class="button" type="button" value="write to file" onclick="writeFile('new.txt') ;"/><br />
-      <input class="button" type="button" value="read from file - new.txt" onclick="readFile('new.txt') ;"/><br />
+      <input class="button" type="button" value="read from file - new.txt" onclick="readFile('new.txt',gotText) ;"/><br />
+      <input class="button" type="button" value="view - new.txt" onclick="alert(file_content) ;"/><br />
       <input class="button" type="button" value="Delete new.txt" onclick="deleteFile('new.txt') ;"/><br />
       <input class="button" type="button" value="dir entries - see console" onclick="getDirectoryEntries();"/><br />
       
