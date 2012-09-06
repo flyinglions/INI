@@ -41,7 +41,13 @@
 	initFileSystem();
 	
 #####then
-	readFile("thefilenamehere");
+	/*initFileSystem not neccessary for readFile*/
+	readFile("thefilenamehere",callbackfunc);	
+	
+	function callbackfunc(text) {
+	/*Where text is the content of the file */
+	}
+	
 	writeFile("thefilenamehere");
 	deleteFile("thefilenamehere");
 	
