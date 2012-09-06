@@ -5,7 +5,7 @@
 ### (1) Include the inisystem.js file in your html ..
 ### (2) when the device is ready  - call startINI(): (see index.html for more detail)
 
-# An INI system for storage and retrieval of settings
+# An INI system for storage and retrieval of settings:
 
 	//add the following code in html javascript tag:
 	<script type="text/javascript">
